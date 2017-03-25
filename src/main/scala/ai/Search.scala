@@ -5,11 +5,13 @@ import core.{Board, Player}
 object Search {
 
   def negamax(board: Board, depth: Int): Int = {
-    if (depth == 0 || board.isGameOver) return value(board)
+    if (depth == 0 || board.isGameOver) return board.turn * value(board)
 
-    board.getMoves.map {
+    val v = board.getMoves.map {
       b => -negamax(b, depth - 1)
     }.max
+    if (depth > 4) println("value: " + v)
+    v
   }
 
   // TODO consider other player's groups

@@ -16,11 +16,11 @@ object CLI extends App {
     prettyPrint(b)
     val i: Int = readColumn(b.width) - 1
 
-    val nextBoard = b.move(i)
+    val nextBoard = b.move(i).get // TODO handle None
     if (nextBoard.isGameOver) return nextBoard
     prettyPrint(nextBoard)
 
-    val computersBoard = nextBoard.getMoves.maxBy(Search.negamax(_, 5))
+    val computersBoard = nextBoard.getMoves.minBy(Search.negamax(_, 5))
     if (computersBoard.isGameOver) return computersBoard
 
     loop(computersBoard)
