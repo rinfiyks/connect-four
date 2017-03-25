@@ -16,12 +16,6 @@ case class Board(width: Int, height: Int, pieces: List[Piece], turn: Player) {
 
   // The assumption is that this will get checked after every move - it will only look for wins involving the last piece played.
   lazy val winner: Player = {
-    @annotation.tailrec
-    def lookForAdjacentPieces(xInc: Int, yInc: Int, xCurr: Int, yCurr: Int, count: Int): Int = {
-      if (gridOrElse0(xCurr + xInc, yCurr + yInc) == -turn) return lookForAdjacentPieces(xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
-      else count
-    }
-
     if (pieces.isEmpty) 0
     else {
       val x = pieces.head.x
@@ -35,8 +29,14 @@ case class Board(width: Int, height: Int, pieces: List[Piece], turn: Player) {
     }
   }
 
+  @annotation.tailrec
+  private final def lookForAdjacentPieces(xInc: Int, yInc: Int, xCurr: Int, yCurr: Int, count: Int): Int = {
+    if (gridOrElse0(xCurr + xInc, yCurr + yInc) == -turn) return lookForAdjacentPieces(xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
+    else count
+  }
+
   def gridOrElse0(x: Int, y: Int): Player = {
-    if (x < 0 || y < 0 || x >= width || y >= width) 0
+    if (x < 0 || y < 0 || x >= width || y >= height) 0
     else grid(x)(y)
   }
 
@@ -49,12 +49,16 @@ case class Board(width: Int, height: Int, pieces: List[Piece], turn: Player) {
     }
   }
 
+  // TODO return Option[Board] for if it's an illegal state
+  def move(x: Int): Board = {
+    val highestPiece: Int = pieces.filter(_.x == x).sortBy(-_.y).headOption.map(_.y).getOrElse(-1)
+    Board(width, height, Piece(x, highestPiece + 1, turn) +: pieces, -turn)
+  }
+
 }
 
 object Board {
 
   def newBoard = Board(7, 6, List.empty, 1)
-
-  def fullMiddleColumnBoard = Board(7, 6, List(Piece(3, 0, -1), Piece(3, 1, 1), Piece(3, 2, -1), Piece(3, 3, 1), Piece(3, 4, -1), Piece(3, 5, 1)), 1)
 
 }

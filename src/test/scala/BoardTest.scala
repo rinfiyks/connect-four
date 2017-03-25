@@ -1,4 +1,4 @@
-import core.Board
+import core.{Board, Piece}
 import org.scalatest.FunSuite
 
 class BoardTest extends FunSuite {
@@ -8,7 +8,7 @@ class BoardTest extends FunSuite {
   }
 
   test("getMoves returns the correct number of boards for a board with the middle column full") {
-    assert(6 === Board.fullMiddleColumnBoard.getMoves.size)
+    assert(6 === Board(7, 6, List(Piece(3, 0, -1), Piece(3, 1, 1), Piece(3, 2, -1), Piece(3, 3, 1), Piece(3, 4, -1), Piece(3, 5, 1)), 1).getMoves.size)
   }
 
   test("empty board does not count as a win") {
