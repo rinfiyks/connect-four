@@ -40,19 +40,13 @@ case class Board(width: Int, height: Int, pieces: List[Piece], turn: Player) {
     else grid(x)(y)
   }
 
-  def getMoves: List[Board] = {
-    (0 until width).toList.flatMap {
-      x =>
-        val highestPiece: Int = pieces.filter(_.x == x).sortBy(-_.y).headOption.map(_.y).getOrElse(-1)
-        if (highestPiece == height - 1) List.empty
-        else List(Board(width, height, Piece(x, highestPiece + 1, turn) +: pieces, -turn))
-    }
-  }
+  def getMoves: List[Board] =
+    (0 until width).toList.flatMap(move)
 
-  // TODO return Option[Board] for if it's an illegal state
-  def move(x: Int): Board = {
+  def move(x: Int): Option[Board] = {
     val highestPiece: Int = pieces.filter(_.x == x).sortBy(-_.y).headOption.map(_.y).getOrElse(-1)
-    Board(width, height, Piece(x, highestPiece + 1, turn) +: pieces, -turn)
+    if (highestPiece == height - 1) return None
+    else return Some(Board(width, height, Piece(x, highestPiece + 1, turn) +: pieces, -turn))
   }
 
 }
