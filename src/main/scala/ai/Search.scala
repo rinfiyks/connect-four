@@ -37,9 +37,9 @@ object Search {
 
   @annotation.tailrec
   private final def lookForGroups(board: Board, xInc: Int, yInc: Int, xCurr: Int, yCurr: Int, count: Int): Int = {
-    if (board.gridOrElse0(xCurr + xInc, yCurr + yInc) == -board.turn) {
+    if (board.gridOption(xCurr + xInc, yCurr + yInc).contains(-board.turn)) {
       lookForGroups(board, xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
-    } else if (board.gridOrElse0(xCurr + xInc, yCurr + yInc) == 0) { // TODO This is bad, because it will think that it can play outside the bounds of the board
+    } else if (board.gridOption(xCurr + xInc, yCurr + yInc).contains(0)) {
       count
     } else 0
   }

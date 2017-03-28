@@ -31,17 +31,19 @@ case class Board(width: Int, height: Int, pieces: List[Piece], turn: Player) {
 
   @annotation.tailrec
   private final def lookForAdjacentPieces(xInc: Int, yInc: Int, xCurr: Int, yCurr: Int, count: Int): Int = {
-    if (gridOrElse0(xCurr + xInc, yCurr + yInc) == -turn) return lookForAdjacentPieces(xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
+    if (gridOption(xCurr + xInc, yCurr + yInc).contains(-turn)) return lookForAdjacentPieces(xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
     else count
   }
 
-  def gridOrElse0(x: Int, y: Int): Player = {
-    if (x < 0 || y < 0 || x >= width || y >= height) 0
-    else grid(x)(y)
+  def gridOption(x: Int, y: Int): Option[Player] = {
+    if (x < 0 || y < 0 || x >= width || y >= height) None
+    else Some(grid(x)(y))
   }
 
-  def getMoves: List[Board] =
-    (0 until width).toList.flatMap(move)
+  def getMoves: List[Board] = {
+    if (isGameOver) List.empty
+    else (0 until width).toList.flatMap(move)
+  }
 
   def move(x: Int): Option[Board] = {
     val highestPiece: Int = pieces.filter(_.x == x).sortBy(-_.y).headOption.map(_.y).getOrElse(-1)
