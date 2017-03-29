@@ -31,7 +31,7 @@ case class Board(width: Int, height: Int, pieces: List[Piece], turn: Player) {
 
   @annotation.tailrec
   private final def lookForAdjacentPieces(xInc: Int, yInc: Int, xCurr: Int, yCurr: Int, count: Int): Int = {
-    if (gridOption(xCurr + xInc, yCurr + yInc).contains(-turn)) return lookForAdjacentPieces(xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
+    if (gridOption(xCurr + xInc, yCurr + yInc).contains(-turn)) lookForAdjacentPieces(xInc, yInc, xCurr + xInc, yCurr + yInc, count + 1)
     else count
   }
 
