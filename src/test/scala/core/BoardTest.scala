@@ -1,4 +1,5 @@
-import core.{Board, Piece}
+package core
+
 import org.scalatest.FunSuite
 
 // TODO come up with a better way than .move( ).get repeatedly

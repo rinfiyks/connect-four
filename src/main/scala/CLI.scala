@@ -20,7 +20,7 @@ object CLI extends App {
     if (nextBoard.isGameOver) return nextBoard
     prettyPrint(nextBoard)
 
-    val computersBoard = nextBoard.getMoves.minBy(Search.negamax(_, 5))
+    val computersBoard = nextBoard.getMoves.minBy(Search.minimax(_, 5))
     if (computersBoard.isGameOver) return computersBoard
 
     loop(computersBoard)
@@ -35,8 +35,8 @@ object CLI extends App {
     println("-" * (board.width + 2) + "  next to move: " + playerMap(board.turn))
 
     def playerMap(p: Player): String = p match {
-      case -1 => "O"
-      case 1 => "X"
+      case -1 => "o"
+      case 1 => "x"
       case _ => "·"
     }
   }
